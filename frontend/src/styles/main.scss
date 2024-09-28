@@ -1,0 +1,15 @@
+
+
+:root {
+    /* Default global value */
+    --bulma-size-medium: 1.25rem;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;padding-top: 10rem;
+    font-weight: normal;
+}
+
+.button {
+    /* Overrides the global value */
+    --bulma-size-medium: 1.5rem;
+}
