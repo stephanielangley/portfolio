@@ -1,25 +1,21 @@
 <script setup lang="ts">
-import { ref, useTemplateRef, onMounted } from 'vue'
+import { useTemplateRef, onMounted } from 'vue'
 import Chart from 'chart.js/auto'
-import axios from 'axios'
-import { ENDPOINTS } from '../utils/common'
 
 const props = defineProps(['data'])
 
 const backgroundColor = [
-  'rgb(255, 99, 132)',
-  'rgb(54, 162, 235)',
-  'rgb(255, 205, 86)'
+  'hsl(171, 100%, 41%)',
+  'hsl(217, 71%, 53%)',
+  'hsl(204, 86%, 53%)	'
 ]
-
-console.log(props.data)
 
 const datasets = [{
   label: 'All Time Stats',
   data: [
-    props.data.all_run_totals.distance,
-    props.data.all_swim_totals.distance,
-    props.data.all_ride_totals.distance
+    props.data.all_run_totals.count,
+    props.data.all_swim_totals.count,
+    props.data.all_ride_totals.count
   ],
   backgroundColor: backgroundColor,
   hoverOffset: 4,
@@ -27,9 +23,9 @@ const datasets = [{
 {
   label: 'Year To Date',
   data: [
-    props.data.ytd_run_totals.distance,
-    props.data.ytd_swim_totals.distance,
-    props.data.ytd_ride_totals.distance
+    props.data.ytd_run_totals.count,
+    props.data.ytd_swim_totals.count,
+    props.data.ytd_ride_totals.count
   ],
   backgroundColor: backgroundColor,
   hoverOffset: 4,
@@ -37,12 +33,13 @@ const datasets = [{
 {
   label: 'Last 4 weeks',
   data: [
-    props.data.recent_run_totals.distance,
-    props.data.recent_swim_totals.distance,
-    props.data.recent_ride_totals.distance
+    props.data.recent_run_totals.count,
+    props.data.recent_swim_totals.count,
+    props.data.recent_ride_totals.count
   ],
   backgroundColor: backgroundColor,
   hoverOffset: 4,
+  borderWidth: false
 }]
 
 const chartConfig = {
@@ -63,5 +60,8 @@ onMounted(() => { new Chart(chart.value, chartConfig) })
 </script>
 
 <template>
-  <canvas ref="chart"></canvas>
+  <div class="row">
+    <h2>Strava Stats</h2>
+    <canvas class="chart" ref="chart"></canvas>
+  </div>
 </template>

@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap');
+
+$family-serif: 'Montserrat', serif;
+$family-primary: $family-serif;
+
+$body-size: 16px;
+
+$spacing-values: (
+    '0': 0,
+    'small': 8px,
+    'medium': 16px,
+    'large': 32px,
+    'xxlarge': 64px,
+    'xlarge': 128px,
+    'auto': auto,
+);
+
+@import 'bulma/sass/utilities/initial-variables';
+@import 'bulma/sass/utilities/functions';
+
+$primary: #0fbab1;
+$info: #1daeff;
+$warning: #e67d00;
+$danger: #f0123f;
+$dark: #252526;
+$light: #f1f2f3;
+$secondary: #43546e;
+$scheme-main: $dark;
+
+$text: $light;
+$link: $primary;
+$link-hover: $link;
+$content-heading-color: $light;
+$title-color: $light;
+$subtitle-color: $light;
+
+$tablet: 1200px;
+$desktop: 1200px;
+$fullhd: 1600px;

@@ -5,7 +5,6 @@ import { ENDPOINTS } from '../utils/common'
 
 
 const beaches = ref([])
-const beachesColumns = ref([])
 axios.get(ENDPOINTS.Beaches).then(({ data }) => {
   beaches.value = data;
 });
@@ -22,7 +21,7 @@ axios.get(ENDPOINTS.Beaches).then(({ data }) => {
         <th>summary</th>
       </tr>
 
-      <template v-for="(row, i) in beaches">
+      <template v-for="(row, i) in beaches" v-bind:key="i">
         <tr>
           <td>{{ row.date }}</td>
           <td>{{ row.temperatureC }}</td>

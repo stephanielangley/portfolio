@@ -1,0 +1,17 @@
+<svg
+        version="1.1"
+        id="Layer_1"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        x="0px"
+        y="0px"
+        viewBox="0 0 256 256"
+        style="enable-background: new 0 0 256 256"
+        xml:space="preserve"
+    >
+        <g>
+            <path style="fill: #41b883" d="M204.8,20H256L128,240.8L0,20h50.6h47.4L128,71.2L157.4,20H204.8z" />
+            <path style="fill: #41b883" d="M0,20l128,220.8L256,20h-51.2L128,152.5L50.6,20H0z" />
+            <path style="fill: #35495e" d="M50.6,20L128,153.1L204.8,20h-47.4L128,71.2L97.9,20H50.6z" />
+        </g>
+    </svg>
