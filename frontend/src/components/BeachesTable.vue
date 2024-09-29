@@ -13,7 +13,6 @@ axios.get(ENDPOINTS.Beaches).then(({ data }) => {
 </script>
 
 <template>
-  {{ count }}
   <table>
     <tbody>
       <tr>

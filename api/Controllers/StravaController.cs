@@ -8,45 +8,50 @@ namespace api.Controllers;
 public class StravaController : ControllerBase
 {
 
-    private readonly ILogger<StravaController> _logger;
     private HttpClient _client;
-    private readonly IConfiguration _config;
 
-    public StravaController(ILogger<StravaController> logger, HttpClient client, IConfiguration config)
+    private StravaToken _stravaToken;
+    private Exception HttpResponseException(Exception exception)
     {
-        _logger = logger;
-        _client = client;
-        _config = config;
+        throw new NotImplementedException();
     }
 
-    [HttpGet("activity-stats")]
+
+    public StravaController(HttpClient client, StravaToken stravaToken)
+    {
+        _client = client;
+        _stravaToken = stravaToken;
+    }
+
+    [HttpGet]
+    [ActionName("activity-stats")]
     public async Task<ActivityStats?> GetActivityStatsAsync()
     {
-        var stravaApiKey = _config["Strava:ServiceApiKey"];
 
-        // var environment = Environment.GetEnvironmentVariable("strava");
+        var accessToken = await _stravaToken.GetAccessToken();
+
+        Console.WriteLine("Token: " + accessToken);
+
+        if (accessToken == "Authentication Required")
+            return null;
+
         _client.DefaultRequestHeaders.Authorization =
-new AuthenticationHeaderValue("Bearer", stravaApiKey);
+new AuthenticationHeaderValue("Bearer", accessToken);
 
         try
         {
             HttpResponseMessage response = await _client.GetAsync("https://www.strava.com/api/v3/athletes/16045483/stats");
 
             response.EnsureSuccessStatusCode();
-            System.Diagnostics.Debug.WriteLine("SUCCESS:");
-            System.Diagnostics.Debug.WriteLine(response);
+            Console.WriteLine("SUCCESS:");
+            Console.WriteLine(response);
             return await response.Content.ReadFromJsonAsync<ActivityStats>();
         }
         catch (Exception exception)
         {
-            System.Diagnostics.Debug.WriteLine("CAUGHT EXCEPTION:");
-            System.Diagnostics.Debug.WriteLine(exception);
+            Console.WriteLine("CAUGHT EXCEPTION:");
+            Console.WriteLine(exception);
             throw HttpResponseException(exception);
         }
-    }
-
-    private Exception HttpResponseException(Exception exception)
-    {
-        throw new NotImplementedException();
     }
 }

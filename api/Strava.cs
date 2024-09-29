@@ -1,3 +1,4 @@
+using System.Text;
 namespace api;
 
 public class ActivityStats
@@ -27,3 +28,133 @@ public class ActivityTotal
     public int achievement_count { get; set; }
 
 }
+
+public class AuthCredentials
+{
+    public required string token_type { get; set; }
+    public required string access_token { get; set; }
+    public int expires_at { get; set; }
+    public int expires_in { get; set; }
+    public required string refresh_token { get; set; }
+
+}
+
+public class StravaToken
+{
+    private HttpClient _client;
+    private readonly IConfiguration _config;
+
+    public StravaToken(HttpClient client, IConfiguration config)
+    {
+        _client = client;
+        _config = config;
+    }
+
+    private Exception HttpResponseException(Exception exception)
+    {
+        throw new NotImplementedException();
+    }
+
+    public string token_type { get; set; }
+    public string access_token { get; set; }
+    public int expires_at { get; set; }
+    public int expires_in { get; set; }
+    private string refresh_token { get; set; }
+
+    public async Task<string> GetAccessToken()
+    {
+        Int32 unixTimestamp = (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+
+
+
+        if (refresh_token == null)
+        {
+            Console.WriteLine("Getting Strava Refresh Token");
+            return "Authentication Required";
+        }
+
+        Console.WriteLine("Time: " + unixTimestamp + " Expires: " + expires_at);
+        if (unixTimestamp < expires_at)
+        {
+            Console.WriteLine("Returning cached token");
+            return access_token;
+        }
+
+
+        Console.WriteLine("Getting Strava Auth Token ");
+        var stravaAuth = await GetStravaAuthenticationToken();
+
+        access_token = stravaAuth.access_token;
+        expires_at = stravaAuth.expires_at;
+        expires_in = stravaAuth.expires_in;
+        refresh_token = stravaAuth.refresh_token;
+
+        Console.WriteLine("expires " + expires_at);
+
+        Console.WriteLine("strava auth: " + stravaAuth);
+
+        return access_token;
+    }
+
+
+    public async Task<AuthCredentials> GetStravaAuthenticationToken()
+    {
+        Console.WriteLine("refresh token: " + refresh_token);
+
+        var formContent = new FormUrlEncodedContent(new[]
+{
+    new KeyValuePair<string, string>("client_id", "136237"),
+    new KeyValuePair<string, string>("client_secret", _config["Strava:ServiceApiKey"]),
+    new KeyValuePair<string, string>("grant_type", "refresh_token"),
+    new KeyValuePair<string, string>("refresh_token", refresh_token)
+});
+
+        try
+        {
+            HttpResponseMessage response = await _client.PostAsync("https://www.strava.com/api/v3/oauth/token", formContent);
+            Console.WriteLine("response :" + response);
+
+            return await response.Content.ReadFromJsonAsync<AuthCredentials>();
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine("CAUGHT EXCEPTION:");
+            Console.WriteLine(exception);
+            throw HttpResponseException(exception);
+        }
+    }
+
+    public async Task<AuthCredentials> GetStravaRefreshToken(string code)
+    {
+
+        var formContent = new FormUrlEncodedContent(new[]
+       {
+        new KeyValuePair<string, string>("client_id", "136237"),
+        new KeyValuePair<string, string>("client_secret", _config["Strava:ServiceApiKey"]),
+        new KeyValuePair<string, string>("code", code),
+        new KeyValuePair<string, string>("grant_type", "authorization_code")
+    });
+
+        Console.WriteLine("Authorization values: " + code);
+        try
+        {
+            HttpResponseMessage response = await _client.PostAsync("https://www.strava.com/api/v3/oauth/token", formContent);
+
+            var stravaAuth = await response.Content.ReadFromJsonAsync<AuthCredentials>();
+
+            access_token = stravaAuth.access_token;
+            expires_at = stravaAuth.expires_at;
+            expires_in = stravaAuth.expires_in;
+            refresh_token = stravaAuth.refresh_token;
+            Console.WriteLine("strava auth object" + stravaAuth);
+            return stravaAuth;
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine("CAUGHT EXCEPTION:");
+            Console.WriteLine(exception);
+            throw HttpResponseException(exception);
+        }
+    }
+}
+
