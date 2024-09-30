@@ -12,7 +12,7 @@ defineProps<{
 
 <template>
   <div class="row">
-    <div class="pl-5 table ">
+    <div class="pl-5 tech-table ">
       <h2>Technologies Used</h2>
       <div v-for="tech in technologies" class="is-flex is-align-items-center my-large" :key="tech.name">
         <div class="logo">
@@ -30,7 +30,7 @@ defineProps<{
 </template>
 
 <style>
-.table {
+.tech-table {
   border-left: 1px #ccc dashed
 }
 

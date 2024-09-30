@@ -21,11 +21,11 @@ axios.get(ENDPOINTS.Strava).then(({ data }) => {
     <div class="is-flex is-flex-direction-column is-align-items-center content">
 
       <NavigationBar />
-      <ProfileDescriptor title="Stephanie Langley"
+      <ProfileDescriptor
         msg="This site showcases a fullstack setup using the below technologies; alongside 3rd party api's accessed with oath 2." />
       <DevTechnologies :technologies="TECHNOLOGIES" />
       <StravaChart v-if="strava?.length !== 0" :data="strava" />
-      <ResolutionIndicator v-if="strava?.length !== 0" :data="strava" />
+      <ResolutionIndicator />
     </div>
   </div>
 

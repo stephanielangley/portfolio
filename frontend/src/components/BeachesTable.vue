@@ -13,14 +13,16 @@ axios.get(ENDPOINTS.Beaches).then(({ data }) => {
 </script>
 
 <template>
-  <table>
+  <table class="table is-hoverable table is-striped">
     <tbody>
-      <tr>
-        <th>date</th>
-        <th>temperature C</th>
-        <th>temperature F</th>
-        <th>summary</th>
-      </tr>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Temperature C</th>
+          <th>Temperature F</th>
+          <th>Summary</th>
+        </tr>
+      </thead>
 
       <template v-for="(row, i) in beaches" v-bind:key="i">
         <tr>

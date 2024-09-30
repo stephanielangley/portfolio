@@ -1,37 +1,37 @@
 <script setup lang="ts">
-import { useTemplateRef, onMounted } from 'vue'
-import Chart, { type ChartConfiguration } from 'chart.js/auto'
+// import { useTemplateRef, onMounted } from 'vue'
+// import Chart, { type ChartConfiguration } from 'chart.js/auto'
 import SurfForm from './SurfForm.vue'
 
-const chartConfig: ChartConfiguration = {
-  type: 'scatter',
-  data: {
-    labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
-    datasets: [{
-      label: 'Dataset 1',
-      data: []
-    }]
-  },
-  options: {
-    responsive: true,
-    scales: {
-      x: {
-        type: 'time',
-        time: {
-          parser: 'YYYY-M-D',
-          unit: 'day',
-          displayFormats: {
-            day: 'D MMM YYYY'
-          },
-          tooltipFormat: 'D MMM YYYY'
-        }
-      }
-    }
-  }
-}
+// const chartConfig: ChartConfiguration = {
+//   type: 'scatter',
+//   data: {
+//     labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
+//     datasets: [{
+//       label: 'Dataset 1',
+//       data: []
+//     }]
+//   },
+//   options: {
+//     responsive: true,
+//     scales: {
+//       x: {
+//         type: 'time',
+//         time: {
+//           parser: 'YYYY-M-D',
+//           unit: 'day',
+//           displayFormats: {
+//             day: 'D MMM YYYY'
+//           },
+//           tooltipFormat: 'D MMM YYYY'
+//         }
+//       }
+//     }
+//   }
+// }
 
-const chart = useTemplateRef<HTMLCanvasElement>("chart");
-onMounted(() => { if (chart.value) new Chart(chart.value, chartConfig) })
+// const chart = useTemplateRef<HTMLCanvasElement>("chart");
+// onMounted(() => { if (chart.value) new Chart(chart.value, chartConfig) })
 
 </script>
 
@@ -42,7 +42,7 @@ onMounted(() => { if (chart.value) new Chart(chart.value, chartConfig) })
       have my indicator below where I can add new surfs and visualise over time the best swell periods and track
       whether I am "on target" for my goal.</p>
     <SurfForm />
-    <canvas class="chart" ref="chart"></canvas>
+    <!-- <canvas class="chart" ref="chart"></canvas> -->
   </div>
 
 </template>

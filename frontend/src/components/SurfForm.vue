@@ -23,23 +23,20 @@ const submit = () => {
   <div class="row">
     <h3>Surf</h3>
     <form @submit.prevent="submit">
-      <div class="field">
-        <label class="label">Beach</label>
-        <div class="control">
+      <div class="field is-flex is-flex-direction-row is-align-items-flex-end">
+        <div class="control mr-5"><label class="label">Beach</label>
           <select class="select" v-model="beach">
             <option v-for="option in options" :value="option" v-bind:key="option.id">
               {{ option.name }}
             </option>
           </select>
         </div>
-      </div>
-      <label class="label">Date</label>
-      <div class="control">
-        <input class="input" type="date" v-model="date" />
-      </div>
-
-      <div class="control">
-        <button class="button is-link" type="submit">Submit</button>
+        <div class="control mr-5"><label class="label">Date</label>
+          <input class="input" type="date" v-model="date" />
+        </div>
+        <div class="control">
+          <button class="button is-link" type="submit">Submit</button>
+        </div>
       </div>
     </form>
   </div>
