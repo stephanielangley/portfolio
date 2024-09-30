@@ -1,8 +1,7 @@
-version: "3"
 name: portfolio-api
 services:
   api.stephlangley.me:
-    env_file: ".env"
+    # env_file: ".env"
     image: ghcr.io/stephanielangley/portfolio/api:latest
     build:
       context: .
