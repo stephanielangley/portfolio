@@ -5,7 +5,7 @@ on:
     branches: main
 
 jobs:
-  backend-build:
+  api-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -22,7 +22,7 @@ jobs:
         env:
           CONTAINER: ghcr.io/${{ github.repository }}/api
         with:
-          context: backend
+          context: api
           file: api/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
@@ -30,8 +30,8 @@ jobs:
           cache-from: type=registry,ref=${{ env.CONTAINER }}:buildcache
           cache-to: type=registry,ref=${{ env.CONTAINER }}:buildcache,mode=max
 
-  backend-deploy:
-    needs: backend-build
+  api-deploy:
+    needs: api-build
     runs-on: steph-1
     steps:
       - uses: actions/checkout@v2
@@ -50,7 +50,7 @@ jobs:
           STRAVAAUTHURL: ${{secrets.STRAVAAUTHURL}}
 
         run: |
-          cd backend
+          cd api
           docker compose pull
           docker compose up -d
           docker image prune -f
