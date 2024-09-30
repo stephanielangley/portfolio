@@ -8,7 +8,7 @@ services:
       context: .
     container_name: api.stephlangley.me
     ports:
-      - 8080:8080
+      - 8080:80
     environment:
       - STRAVACLIENTID
       - STRAVAATHLETEI
