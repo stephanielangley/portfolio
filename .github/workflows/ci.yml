@@ -55,40 +55,38 @@ jobs:
   frontend:
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    runs:
-      using: "composite"
-      steps:
-        - uses: actions/checkout@v3
-        - uses: actions/setup-node@v3
-          with:
-            node-version: "20"
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "20"
 
-        - uses: actions/cache@v3
-          with:
-            path: ~/.npm
-            key: npm-${{ hashFiles('**/package-lock.json') }}
-            restore-keys: npm-
+      - uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: npm-
 
-        - name: NPM Install Frontend
-          working-directory: ./frontend
-          shell: bash
-          run: npm ci --cache ~/.npm --prefer-offline
+      - name: NPM Install Frontend
+        working-directory: ./frontend
+        shell: bash
+        run: npm ci --cache ~/.npm --prefer-offline
 
-        - name: NPM Build
-          working-directory: ./frontend
-          shell: bash
-          run: npm run build
+      - name: NPM Build
+        working-directory: ./frontend
+        shell: bash
+        run: npm run build
 
-        - name: Install azcopy
-          shell: bash
-          run: |
-            curl -L https://aka.ms/downloadazcopy-v10-linux | tar -zxf -
-            sudo mv ./azcopy_linux_amd64_*/azcopy /usr/bin/
-            azcopy --version
+      - name: Install azcopy
+        shell: bash
+        run: |
+          curl -L https://aka.ms/downloadazcopy-v10-linux | tar -zxf -
+          sudo mv ./azcopy_linux_amd64_*/azcopy /usr/bin/
+          azcopy --version
 
-        - name: Sync files
-          working-directory: ./frontend
-          shell: bash
-          run: azcopy sync dist $STORAGE_SAS --recursive
-          env:
-            STORAGE_SAS: ${{ secrets.STORAGE_SAS }}
+      - name: Sync files
+        working-directory: ./frontend
+        shell: bash
+        run: azcopy sync dist $STORAGE_SAS --recursive
+        env:
+          STORAGE_SAS: ${{ secrets.STORAGE_SAS }}
