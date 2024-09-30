@@ -6,7 +6,7 @@ import { RouterLink } from 'vue-router'
     <div class="is-flex is-flex-direction-column is-align-items-center content">
 
         <figure class="mb-5 image profile-picture">
-            <img class="is-rounded" src="/img/steph.svg" />
+            <img class="is-rounded" src="/img/steph-portfolio.jpg" />
         </figure>
         <div>
             <nav class="navbar mb-4">
