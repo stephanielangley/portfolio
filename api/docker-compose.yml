@@ -1,0 +1,16 @@
+version: "3"
+name: portfolio-api
+services:
+  api.stephlangley.me:
+    env_file: ".env"
+    image: ghcr.io/stephanielangley/portfolio/api:latest
+    build:
+      context: .
+    container_name: api.stephlangley.me
+    ports:
+      - 8080:8080
+    environment:
+      - STRAVACLIENTID
+      - STRAVAATHLETEI
+      - STRAVASECRET
+      - STRAVAAUTHURL

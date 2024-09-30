@@ -10,6 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<StravaToken>();
+builder.Services.AddSingleton<Config>();
 
 
 var app = builder.Build();

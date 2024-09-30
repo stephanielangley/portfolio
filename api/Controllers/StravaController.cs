@@ -9,7 +9,7 @@ public class StravaController : ControllerBase
 {
 
     private HttpClient _client;
-
+    private Config _config;
     private StravaToken _stravaToken;
     private Exception HttpResponseException(Exception exception)
     {
@@ -17,10 +17,11 @@ public class StravaController : ControllerBase
     }
 
 
-    public StravaController(HttpClient client, StravaToken stravaToken)
+    public StravaController(HttpClient client, StravaToken stravaToken, Config config)
     {
         _client = client;
         _stravaToken = stravaToken;
+        _config = config;
     }
 
     [HttpGet]
@@ -40,7 +41,7 @@ new AuthenticationHeaderValue("Bearer", accessToken);
 
         try
         {
-            HttpResponseMessage response = await _client.GetAsync("https://www.strava.com/api/v3/athletes/16045483/stats");
+            HttpResponseMessage response = await _client.GetAsync("https://www.strava.com/api/v3/athletes/" + _config.STRAVAATHLETEID + "/stats");
 
             response.EnsureSuccessStatusCode();
             Console.WriteLine("SUCCESS:");

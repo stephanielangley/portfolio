@@ -31,6 +31,8 @@ public class StravaAuthController : ControllerBase
             Console.WriteLine("Passing Auth URL Through:" + code);
             var auth = await _stravaToken.GetStravaRefreshToken(code);
 
+            if (auth == null)
+                return "Authentication Failed";
 
             return "Successfully authenticated";
         }

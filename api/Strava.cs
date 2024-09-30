@@ -1,4 +1,3 @@
-using System.Text;
 namespace api;
 
 public class ActivityStats
@@ -31,37 +30,30 @@ public class ActivityTotal
 
 public class AuthCredentials
 {
-    public required string token_type { get; set; }
-    public required string access_token { get; set; }
-    public int expires_at { get; set; }
-    public int expires_in { get; set; }
-    public required string refresh_token { get; set; }
+    public string token_type { get; set; } = "";
+    public string access_token { get; set; } = "";
+    public int expires_at { get; set; } = 0;
+    public int expires_in { get; set; } = 0;
+    public string refresh_token { get; set; } = "";
 
 }
 
-public class StravaToken
+public class StravaToken(HttpClient client, Config config)
 {
-    private HttpClient _client;
-    private readonly IConfiguration _config;
-
-    public StravaToken(HttpClient client, IConfiguration config)
-    {
-        _client = client;
-        _config = config;
-    }
+    private HttpClient _client = client;
+    private readonly Config _config = config;
 
     private Exception HttpResponseException(Exception exception)
     {
         throw new NotImplementedException();
     }
 
-    public string token_type { get; set; }
-    public string access_token { get; set; }
+    public required string access_token { get; set; }
     public int expires_at { get; set; }
     public int expires_in { get; set; }
-    private string refresh_token { get; set; }
+    private string? refresh_token { get; set; }
 
-    public async Task<string> GetAccessToken()
+    public async Task<string?> GetAccessToken()
     {
         Int32 unixTimestamp = (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
 
@@ -84,6 +76,9 @@ public class StravaToken
         Console.WriteLine("Getting Strava Auth Token ");
         var stravaAuth = await GetStravaAuthenticationToken();
 
+        if (stravaAuth == null)
+            return null;
+
         access_token = stravaAuth.access_token;
         expires_at = stravaAuth.expires_at;
         expires_in = stravaAuth.expires_in;
@@ -97,14 +92,17 @@ public class StravaToken
     }
 
 
-    public async Task<AuthCredentials> GetStravaAuthenticationToken()
+    public async Task<AuthCredentials?> GetStravaAuthenticationToken()
     {
         Console.WriteLine("refresh token: " + refresh_token);
 
+        if (_config.STRAVACLIENTID == null || _config.STRAVASECRET == null || refresh_token == null)
+        { return null; }
+
         var formContent = new FormUrlEncodedContent(new[]
 {
-    new KeyValuePair<string, string>("client_id", "136237"),
-    new KeyValuePair<string, string>("client_secret", _config["Strava:ServiceApiKey"]),
+    new KeyValuePair<string, string>("client_id", _config.STRAVACLIENTID),
+    new KeyValuePair<string, string>("client_secret", _config.STRAVASECRET),
     new KeyValuePair<string, string>("grant_type", "refresh_token"),
     new KeyValuePair<string, string>("refresh_token", refresh_token)
 });
@@ -124,13 +122,15 @@ public class StravaToken
         }
     }
 
-    public async Task<AuthCredentials> GetStravaRefreshToken(string code)
+    public async Task<AuthCredentials?> GetStravaRefreshToken(string code)
     {
+        if (_config.STRAVACLIENTID == null || _config.STRAVASECRET == null)
+        { return null; }
 
         var formContent = new FormUrlEncodedContent(new[]
        {
-        new KeyValuePair<string, string>("client_id", "136237"),
-        new KeyValuePair<string, string>("client_secret", _config["Strava:ServiceApiKey"]),
+    new KeyValuePair<string, string>("client_id",  _config.STRAVACLIENTID),
+    new KeyValuePair<string, string>("client_secret", _config.STRAVASECRET),
         new KeyValuePair<string, string>("code", code),
         new KeyValuePair<string, string>("grant_type", "authorization_code")
     });
@@ -141,6 +141,8 @@ public class StravaToken
             HttpResponseMessage response = await _client.PostAsync("https://www.strava.com/api/v3/oauth/token", formContent);
 
             var stravaAuth = await response.Content.ReadFromJsonAsync<AuthCredentials>();
+            if (stravaAuth == null)
+                return null;
 
             access_token = stravaAuth.access_token;
             expires_at = stravaAuth.expires_at;
@@ -155,6 +157,8 @@ public class StravaToken
             Console.WriteLine(exception);
             throw HttpResponseException(exception);
         }
+
     }
+
 }
 

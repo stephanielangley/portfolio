@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace api.Controllers;
 
@@ -7,26 +8,21 @@ namespace api.Controllers;
 public class StravaAuthRedirectController : ControllerBase
 {
 
-    private HttpClient _client;
-    private Exception HttpResponseException(Exception exception)
+    private readonly Config _config;
+    public StravaAuthRedirectController(Config config)
     {
-        throw new NotImplementedException();
-    }
-
-
-    public StravaAuthRedirectController(HttpClient client)
-    {
-        _client = client;
+        _config = config;
     }
 
     [HttpGet]
     [ActionName("strava-auth-redirect")]
-    public RedirectResult GetStravaAuth()
+    public RedirectResult? GetStravaAuth()
     {
 
 
-        return Redirect("http://www.strava.com/oauth/authorize?client_id=136237&response_type=code&redirect_uri=http://localhost:5173/api/stravaauth&approval_prompt=force&scope=read");
+        if (_config.STRAVAAUTHURL == null)
+            return null;
 
-
+        return Redirect(_config.STRAVAAUTHURL);
     }
 }
