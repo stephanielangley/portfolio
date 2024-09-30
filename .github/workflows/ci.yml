@@ -52,39 +52,43 @@ jobs:
           docker compose up -d
           docker image prune -f
 
-  # frontend:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
+  frontend:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    runs:
+      using: "composite"
+      steps:
+        - uses: actions/checkout@v3
+        - uses: actions/setup-node@v3
+          with:
+            node-version: "20"
 
-  #     - uses: actions/setup-node@v4
-  #       with:
-  #         node-version: '20'
+        - uses: actions/cache@v3
+          with:
+            path: ~/.npm
+            key: npm-${{ hashFiles('**/package-lock.json') }}
+            restore-keys: npm-
 
-  #     - uses: actions/cache@v4
-  #       with:
-  #         path: ~/.npm
-  #         key: npm-${{ hashFiles('**/package-lock.json') }}
-  #         restore-keys: npm-
+        - name: NPM Install Frontend
+          working-directory: ./frontend
+          shell: bash
+          run: npm ci --cache ~/.npm --prefer-offline
 
-  #     - name: NPM Install
-  #       run: |
-  #         cd frontend
-  #         npm ci --cache ~/.npm --prefer-offline
+        - name: NPM Build
+          working-directory: ./frontend
+          shell: bash
+          run: npm run build
 
-  #     - name: Build
-  #       run: |
-  #         cd frontend
-  #         npm run build
+        - name: Install azcopy
+          shell: bash
+          run: |
+            curl -L https://aka.ms/downloadazcopy-v10-linux | tar -zxf -
+            sudo mv ./azcopy_linux_amd64_*/azcopy /usr/bin/
+            azcopy --version
 
-  #     - uses: aws-actions/configure-aws-credentials@v1
-  #       with:
-  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #         aws-region: ${{ secrets.AWS_REGION }}
-
-  #     - name: Deploy frontend
-  #       run: |
-  #         aws s3 sync frontend/dist s3://hayleslsc.co.uk --exclude '*' --include 'assets/*' --delete --cache-control 'max-age=31536000, immutable'
-  #         aws s3 sync frontend/dist s3://hayleslsc.co.uk --include '*' --exclude 'assets/*' --exclude 'uploads/*' --delete --cache-control 'max-age=60'
-  #         aws cloudfront create-invalidation --distribution-id EG6X5SIQ8QPJI  --paths /index.html
+        - name: Sync files
+          working-directory: ./frontend
+          shell: bash
+          run: azcopy sync dist $STORAGE_SAS --recursive
+          env:
+            STORAGE_SAS: ${{ secrets.STORAGE_SAS }}

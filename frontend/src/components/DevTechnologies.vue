@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import IconLogo from './IconLogo.vue'
 defineProps<{
-  technologies: [{
+  technologies: {
     link: string,
     name: string,
     description: string
     icon: string,
-  }
-  ]
+  }[]
 }>()
 </script>
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useTemplateRef, onMounted } from 'vue'
-import Chart from 'chart.js/auto'
+import Chart, { type ChartConfiguration } from 'chart.js/auto'
 
 const props = defineProps(['data'])
 
@@ -39,10 +39,9 @@ const datasets = [{
   ],
   backgroundColor: backgroundColor,
   hoverOffset: 4,
-  borderWidth: false
 }]
 
-const chartConfig = {
+const chartConfig: ChartConfiguration = {
   type: 'doughnut',
   data: {
     labels: [
@@ -55,7 +54,7 @@ const chartConfig = {
 };
 
 const chart = useTemplateRef("chart");
-onMounted(() => { new Chart(chart.value, chartConfig) })
+onMounted(() => { if (chart.value) new Chart(chart.value, chartConfig) })
 
 </script>
 

@@ -3,8 +3,9 @@ import { ref } from 'vue'
 import axios from 'axios'
 import { ENDPOINTS } from '../utils/common'
 
+type beach = { date: string, temperatureC: string, temperatureF: string, summary: string }
 
-const beaches = ref([])
+const beaches = ref<beach[]>([])
 axios.get(ENDPOINTS.Beaches).then(({ data }) => {
   beaches.value = data;
 });

@@ -1,26 +1,17 @@
 <script setup lang="ts">
 import { useTemplateRef, onMounted } from 'vue'
-import Chart from 'chart.js/auto'
+import Chart, { type ChartConfiguration } from 'chart.js/auto'
 import SurfForm from './SurfForm.vue'
 
-
-
-
-const data = {
-  labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
-  datasets: [{
-    label: 'Dataset 1',
-    data: [{ x: "2022-1-8", y: 950 },
-    { x: "2022-1-9", y: 1100 },
-    { x: "2022-1-10", y: 990 },
-    { x: "2022-1-12", y: 1250 },
-    { x: "2022-1-13", y: 1050 }]
-  }]
-}
-
-const chartConfig = {
+const chartConfig: ChartConfiguration = {
   type: 'scatter',
-  data,
+  data: {
+    labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
+    datasets: [{
+      label: 'Dataset 1',
+      data: []
+    }]
+  },
   options: {
     responsive: true,
     scales: {
@@ -39,8 +30,8 @@ const chartConfig = {
   }
 }
 
-const chart = useTemplateRef("chart");
-onMounted(() => { new Chart(chart.value, chartConfig) })
+const chart = useTemplateRef<HTMLCanvasElement>("chart");
+onMounted(() => { if (chart.value) new Chart(chart.value, chartConfig) })
 
 </script>
 
