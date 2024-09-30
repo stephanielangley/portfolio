@@ -2,6 +2,7 @@ name: portfolio-api
 services:
   api.stephlangley.me:
     # env_file: ".env"
+    platform: linux/amd64
     image: ghcr.io/stephanielangley/portfolio/api:latest
     build:
       context: .

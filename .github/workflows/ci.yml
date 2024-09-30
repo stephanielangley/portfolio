@@ -43,7 +43,7 @@ jobs:
       - name: Pull
         env:
           STRAVACLIENTID: ${{secrets.STRAVACLIENTID}}
-          STRAVAATHLETEI: ${{secrets.STRAVAATHLETEI}}
+          STRAVAATHLETEID: ${{secrets.STRAVAATHLETEID}}
           STRAVASECRET: ${{secrets.STRAVASECRET}}
           STRAVAAUTHURL: ${{secrets.STRAVAAUTHURL}}
         run: |
