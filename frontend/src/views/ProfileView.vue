@@ -22,7 +22,7 @@ axios.get(ENDPOINTS.Strava).then(({ data }) => {
 
       <NavigationBar />
       <ProfileDescriptor
-        msg="This site showcases a fullstack setup using the below technologies; alongside 3rd party api's accessed with oath 2." />
+        msg="This site showcases a fullstack setup using the below technologies; alongside 3rd party api's accessed with oauth 2." />
       <DevTechnologies :technologies="TECHNOLOGIES" />
       <StravaChart v-if="strava?.length !== 0" :data="strava" />
       <ResolutionIndicator />

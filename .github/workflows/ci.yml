@@ -46,6 +46,7 @@ jobs:
           STRAVAATHLETEID: ${{secrets.STRAVAATHLETEID}}
           STRAVASECRET: ${{secrets.STRAVASECRET}}
           STRAVAAUTHURL: ${{secrets.STRAVAAUTHURL}}
+          CONNECTIONSTRINGS__DEFAULTCONNECTION: ${{secrets.CONNECTIONSTRINGS__DEFAULTCONNECTION}}
         run: |
           cd api
           docker compose pull

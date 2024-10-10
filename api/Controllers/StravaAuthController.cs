@@ -7,7 +7,6 @@ namespace api.Controllers;
 public class StravaAuthController : ControllerBase
 {
 
-    private HttpClient _client;
     private StravaToken _stravaToken;
     private Exception HttpResponseException(Exception exception)
     {
@@ -15,9 +14,8 @@ public class StravaAuthController : ControllerBase
     }
 
 
-    public StravaAuthController(HttpClient client, StravaToken stravaToken)
+    public StravaAuthController(StravaToken stravaToken)
     {
-        _client = client;
         _stravaToken = stravaToken;
     }
 

@@ -1,41 +1,65 @@
 <script setup lang="ts">
+import { ENDPOINTS } from '@/utils/common';
+import axios from 'axios';
 import { ref } from 'vue'
+import type { beach } from '../utils/types'
+import ErrorMessage from './ErrorMessage.vue';
+import { useQuery, useQueryClient } from '@tanstack/vue-query';
 
-const options = [{ name: "Gwithian", id: 1 }, { name: "Godrevy", id: 2 }]
+const SelectedBeach = ref("");
+const date = ref("");
+const isLoading = ref(false);
 
-const beach = ref({});
-const date = ref('');
+const queryClient = useQueryClient()
+
+const { isFetching, isError, data, error } = useQuery<beach[]>({
+  queryKey: ['beaches'],
+  queryFn: () => axios.get(ENDPOINTS.Beaches).then(({ data }) =>
+    data).catch((error) => error),
+})
 
 const submit = () => {
+  isLoading.value = true;
 
   const data = {
-    "beach": beach.value,
+    "surf_beach_id": SelectedBeach.value,
     "date": date.value,
   }
 
-  console.log(data)
-}
+  axios.post('/api/surfs', data).then(() => {
+    queryClient.invalidateQueries({ queryKey: ["surfs"] });
+    SelectedBeach.value = '';
+    date.value = '';
+    isLoading.value = false;
+  }).catch((err) => { isLoading.value = false; error.value = err })
 
+}
 
 </script>
 
 <template>
   <div class="row">
-    <h3>Surf</h3>
+    <h1>Surfs</h1>
     <form @submit.prevent="submit">
       <div class="field is-flex is-flex-direction-row is-align-items-flex-end">
         <div class="control mr-5"><label class="label">Beach</label>
-          <select class="select" v-model="beach">
-            <option v-for="option in options" :value="option" v-bind:key="option.id">
-              {{ option.name }}
-            </option>
-          </select>
+          <div class="select" :class="{ 'is-loading': isFetching }">
+            <select required v-model="SelectedBeach">
+              <option value="" disabled>Select Beach...</option>
+              <option v-for="option in data" :value="option.beach_id" v-bind:key="option.beach_id">
+                {{ option.name }}
+              </option>
+            </select>
+          </div>
+          <P v-if="isError">
+            <ErrorMessage :error="error" />
+          </P>
         </div>
         <div class="control mr-5"><label class="label">Date</label>
           <input class="input" type="date" v-model="date" />
         </div>
         <div class="control">
-          <button class="button is-link" type="submit">Submit</button>
+          <button class="button is-link" :class="{ 'is-loading': isLoading }" type="submit">Submit</button>
         </div>
       </div>
     </form>

@@ -12,7 +12,7 @@ import { RouterLink } from 'vue-router'
             <p class="is-size-1 mb-1">Stephanie Langley</p>
             <nav class="navbar  is-justify-content-center">
                 <RouterLink class="navbar-item" to="/">Home</RouterLink>
-                <RouterLink class="navbar-item" to="/beaches">Beaches</RouterLink>
+                <RouterLink class="navbar-item" to="/data">Data</RouterLink>
             </nav>
         </div>
     </div>

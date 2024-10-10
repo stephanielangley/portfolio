@@ -29,3 +29,13 @@ uninstall runner service
 above steps replaced with `docker compose up`
 
 - http://localhost:8080/api
+
+## migrate the db tables
+
+create a new migration file
+
+- `dotnet ef migrations add <table-name>`
+
+Update the database with the migration files created above
+
+- `dotnet ef database update`

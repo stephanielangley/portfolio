@@ -1,4 +1,5 @@
 using api;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,10 @@ builder.Services.AddHttpClient();
 builder.Services.AddSingleton<StravaToken>();
 builder.Services.AddSingleton<Config>();
 
+var Configuration = builder.Configuration;
+
+builder.Services.AddDbContext<PortfolioDbContext>(options =>
+        options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 

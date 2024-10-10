@@ -14,3 +14,9 @@ services:
       - STRAVAATHLETEID
       - STRAVASECRET
       - STRAVAAUTHURL
+      - CONNECTIONSTRINGS__DEFAULTCONNECTION
+
+networks:
+  default:
+    name: main
+    external: true

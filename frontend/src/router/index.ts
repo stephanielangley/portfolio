@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import ProfileView from '../views/ProfileView.vue'
-import BeachesView from '../views/BeachesView.vue'
+import DataView from '../views/DataView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,8 +10,8 @@ const router = createRouter({
       component: ProfileView
     },
     {
-      path: '/beaches',
-      component: BeachesView
+      path: '/data',
+      component: DataView
     }
   ]
 })

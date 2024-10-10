@@ -1,6 +1,7 @@
 export const ENDPOINTS = {
   Beaches: '/api/beaches',
-  Strava: '/api/strava'
+  Strava: '/api/strava',
+  Surfs: '/api/surfs'
 }
 
 export const TECHNOLOGIES = [

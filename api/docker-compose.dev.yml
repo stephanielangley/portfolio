@@ -1,0 +1,18 @@
+version: "3.7"
+name: portfolio_db
+services:
+  portfolio-db:
+    image: postgres:14
+    container_name: portfolio_db
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: example
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+
+  portfolio-adminer:
+    image: adminer
+    container_name: portfolio_adminer
+    ports:
+      - 8080:8080
